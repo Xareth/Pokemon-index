@@ -10,13 +10,13 @@ import UIKit
 
 class PokemonListTableViewController: UITableViewController {
 
-    let pokemonManager = PokemonManager()
-    
+    var pokemonManager = PokemonManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         pokemonManager.requestPokemon(pokemonName: "1")
+        pokemonManager.loadItems()
     }
 
     // MARK: - Table view data source

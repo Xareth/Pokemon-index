@@ -72,7 +72,6 @@
 				401582142462B3C30035944B /* Assets.xcassets */,
 				401582162462B3C30035944B /* LaunchScreen.storyboard */,
 				401582192462B3C30035944B /* Info.plist */,
-				401582112462B3C20035944B /* Pokemon_Index.xcdatamodeld */,
 			);
 			path = "Pokemon-Index";
 			sourceTree = "<group>";
@@ -99,6 +98,7 @@
 				401582242462B9580035944B /* PokemonManager.swift */,
 				401582262462C8E20035944B /* PokemonData.swift */,
 				401582282462CC120035944B /* PokemonModel.swift */,
+				401582112462B3C20035944B /* Pokemon_Index.xcdatamodeld */,
 			);
 			path = Models;
 			sourceTree = "<group>";

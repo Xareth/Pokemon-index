@@ -6,10 +6,15 @@
 //  Copyright © 2020 Mikołaj Szadkowski. All rights reserved.
 //
 
-import Foundation
+import UIKit
+import CoreData
 
 
 struct PokemonManager {
+    
+    var context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    
+    var pokemonArray: [Pokemon]?
     
     var baseString = "https://pokeapi.co/api/v2/"
     
@@ -23,7 +28,8 @@ struct PokemonManager {
                     print(error?.localizedDescription)
                 } else {
                     if let safeData = data {
-                        let pokemonData = self.parseJSON(newData: safeData)
+                        let pokemonData = self.parsePokemonJSON(newData: safeData)
+                        self.saveItems()
                     }
                 }
             }
@@ -31,20 +37,43 @@ struct PokemonManager {
         }
     }
     
-    func parseJSON(newData: Data) -> PokemonModel? {
+    // Decode JSON file into Pokemon Object
+    func parsePokemonJSON(newData: Data) -> Pokemon? {
         let decoder = JSONDecoder()
         do {
             let decodedData = try decoder.decode(PokemonData.self, from: newData)
-            let name = decodedData.name
-            let pokemon = PokemonModel(name: name)
+            let pokemon = Pokemon(context: self.context)
+            pokemon.name = decodedData.name
             return pokemon
         } catch {
-            print(error)
+            print(error.localizedDescription)
             return nil
         }
-        
     }
     
+    // Save Pokemon to Core Data
+    func saveItems() {
+        do {
+            try self.context.save()
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
+    
+    // Load Pokemons to pokemonArray
+    mutating func loadItems(with request: NSFetchRequest<Pokemon> = Pokemon.fetchRequest()) {
+        do {
+            pokemonArray = try context.fetch(request)
+            if let savePokemonArray = pokemonArray {
+                for pokemon in savePokemonArray {
+                    print(pokemon.name)
+                }
+            }
+        } catch {
+            print("Error while fetching Item data: \(error.localizedDescription)")
+        }
+    }
+
 }
 
 
