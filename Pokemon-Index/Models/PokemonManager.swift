@@ -14,6 +14,8 @@ struct PokemonManager {
     
     var context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
+    var pokemonArray: [Pokemon]?
+    
     var baseString = "https://pokeapi.co/api/v2/"
     
     // Get API info about Pokemon
@@ -27,7 +29,7 @@ struct PokemonManager {
                 } else {
                     if let safeData = data {
                         let pokemonData = self.parsePokemonJSON(newData: safeData)
-                        print(pokemonData?.name)
+                        self.saveItems()
                     }
                 }
             }
@@ -48,6 +50,30 @@ struct PokemonManager {
             return nil
         }
     }
+    
+    // Save Pokemon to Core Data
+    func saveItems() {
+        do {
+            try self.context.save()
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
+    
+    // Load Pokemons to pokemonArray
+    mutating func loadItems(with request: NSFetchRequest<Pokemon> = Pokemon.fetchRequest()) {
+        do {
+            pokemonArray = try context.fetch(request)
+            if let savePokemonArray = pokemonArray {
+                for pokemon in savePokemonArray {
+                    print(pokemon.name)
+                }
+            }
+        } catch {
+            print("Error while fetching Item data: \(error.localizedDescription)")
+        }
+    }
+
 }
 
 
