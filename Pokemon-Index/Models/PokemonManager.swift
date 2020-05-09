@@ -6,10 +6,13 @@
 //  Copyright © 2020 Mikołaj Szadkowski. All rights reserved.
 //
 
-import Foundation
+import UIKit
+import CoreData
 
 
 struct PokemonManager {
+    
+    var context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     var baseString = "https://pokeapi.co/api/v2/"
     
@@ -23,7 +26,8 @@ struct PokemonManager {
                     print(error?.localizedDescription)
                 } else {
                     if let safeData = data {
-                        let pokemonData = self.parseJSON(newData: safeData)
+                        let pokemonData = self.parsePokemonJSON(newData: safeData)
+                        print(pokemonData?.name)
                     }
                 }
             }
@@ -31,20 +35,19 @@ struct PokemonManager {
         }
     }
     
-    func parseJSON(newData: Data) -> PokemonModel? {
+    // Decode JSON file into Pokemon Object
+    func parsePokemonJSON(newData: Data) -> Pokemon? {
         let decoder = JSONDecoder()
         do {
             let decodedData = try decoder.decode(PokemonData.self, from: newData)
-            let name = decodedData.name
-            let pokemon = PokemonModel(name: name)
+            let pokemon = Pokemon(context: self.context)
+            pokemon.name = decodedData.name
             return pokemon
         } catch {
-            print(error)
+            print(error.localizedDescription)
             return nil
         }
-        
     }
-    
 }
 
 
