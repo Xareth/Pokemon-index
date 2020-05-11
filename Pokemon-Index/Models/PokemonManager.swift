@@ -10,6 +10,12 @@ import UIKit
 import CoreData
 
 
+protocol PokemonRequestDelegate {
+    func pokemonRequestDidFinish()
+    func pokemonRequestDidFinishWithError()
+}
+
+
 struct PokemonManager {
     
     var context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
@@ -17,6 +23,8 @@ struct PokemonManager {
     var pokemonArray: [Pokemon]?
     
     var baseString = "https://pokeapi.co/api/v2/"
+    
+    var delegate: PokemonRequestDelegate?
     
     // Get API info about Pokemon
     func requestPokemon(pokemonName: String) {
@@ -30,6 +38,8 @@ struct PokemonManager {
                     if let safeData = data {
                         let pokemonData = self.parsePokemonJSON(newData: safeData)
                         self.saveItems()
+                        self.delegate?.pokemonRequestDidFinish()
+                        
                     }
                 }
             }
@@ -43,13 +53,32 @@ struct PokemonManager {
         do {
             let decodedData = try decoder.decode(PokemonData.self, from: newData)
             let pokemon = Pokemon(context: self.context)
-            pokemon.name = decodedData.name
+            pokemon.name = decodedData.name.capitalized
+            pokemon.image_url = decodedData.sprites.front_default
+            pokemon.image_front = getPokemonImage(url: decodedData.sprites.front_default)
+            print("New pokemon added \(pokemon.name)")
             return pokemon
         } catch {
             print(error.localizedDescription)
             return nil
         }
     }
+    
+    // Download image sprite for pokemon
+    func getPokemonImage(url: String) -> Data? {
+        if let url = URL(string: url) {
+            do {
+                let imageData = try Data(contentsOf: url, options: [])
+                let image = UIImage(data: imageData)
+                return image?.jpegData(compressionQuality: 1.0)
+            }
+            catch {
+                print(error.localizedDescription)
+            }
+        }
+        return nil
+    }
+    
     
     // Save Pokemon to Core Data
     func saveItems() {
@@ -66,14 +95,25 @@ struct PokemonManager {
             pokemonArray = try context.fetch(request)
             if let savePokemonArray = pokemonArray {
                 for pokemon in savePokemonArray {
-                    print(pokemon.name)
+                    print("Loading new pokemon: \(pokemon.name)")
                 }
             }
         } catch {
             print("Error while fetching Item data: \(error.localizedDescription)")
         }
     }
-
+    
+    // Delete Pokemon
+    func deletePokemon(pokemon: NSManagedObject) {
+        context.delete(pokemon)
+        do {
+            try context.save()
+            print("Pokemon deleted")
+        } catch {
+            print(error.localizedDescription)
+        }
+        
+    }
 }
 
 
