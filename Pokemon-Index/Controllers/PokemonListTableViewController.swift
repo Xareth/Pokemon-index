@@ -11,13 +11,15 @@ import UIKit
 class PokemonListTableViewController: UITableViewController {
 
     var pokemonManager = PokemonManager()
+    var pokemonRequestResult = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         pokemonManager.delegate = self
         tableView.rowHeight = 90
-        preparePokemonList()
+        pokemonManager.loadItems()
+        tableView.reloadData()
         
     }
 
@@ -40,6 +42,15 @@ class PokemonListTableViewController: UITableViewController {
         return cell
     }
     
+    // MARK: - Update Pokemon List
+    func updateModel() {
+        DispatchQueue.main.async {
+            self.pokemonManager.loadItems()
+            self.tableView.reloadData()
+            print("updated")
+        }
+    }
+    
     
     // MARK: - Pokemon loader
     func preparePokemonList() {
@@ -54,31 +65,34 @@ class PokemonListTableViewController: UITableViewController {
         pokemonManager.saveItems()
         print("Preparation completed")
         
-        
-        // Request new pokemons
-        for number in 1...10 {
-            self.pokemonManager.requestPokemon(pokemonName: String(number))
+        var runTime = 0
+        let timer = Timer.scheduledTimer(withTimeInterval: 0.61, repeats: true) { timer in
+            print(runTime)
+            runTime += 1
+            if self.pokemonRequestResult {
+                self.pokemonManager.requestPokemon(pokemonName: String(runTime))
+            } else {
+                timer.invalidate()
+            }
         }
     }
-    
-    func updateModel() {
-        DispatchQueue.main.async {
-            self.pokemonManager.loadItems()
-            self.tableView.reloadData()
-            print("updated")
-        }
+    @IBAction func refreshPokemonsButton(_ sender: UIBarButtonItem) {
+        preparePokemonList()
     }
 }
 
 
 // MARK: - Pokemon Manager Delegate
 extension PokemonListTableViewController: PokemonRequestDelegate {
+    
+    
     func pokemonRequestDidFinish() {
         updateModel()
     }
     
     func pokemonRequestDidFinishWithError() {
         print(Error.self)
+        pokemonRequestResult = false
     }
 }
 

@@ -38,8 +38,11 @@ struct PokemonManager {
                     if let safeData = data {
                         let pokemonData = self.parsePokemonJSON(newData: safeData)
                         self.saveItems()
-                        self.delegate?.pokemonRequestDidFinish()
-                        
+                        if pokemonData == nil {
+                            self.delegate?.pokemonRequestDidFinishWithError()
+                        } else {
+                            self.delegate?.pokemonRequestDidFinish()
+                        }
                     }
                 }
             }
@@ -93,11 +96,6 @@ struct PokemonManager {
     mutating func loadItems(with request: NSFetchRequest<Pokemon> = Pokemon.fetchRequest()) {
         do {
             pokemonArray = try context.fetch(request)
-            if let savePokemonArray = pokemonArray {
-                for pokemon in savePokemonArray {
-                    print("Loading new pokemon: \(pokemon.name)")
-                }
-            }
         } catch {
             print("Error while fetching Item data: \(error.localizedDescription)")
         }

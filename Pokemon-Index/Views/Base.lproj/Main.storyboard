@@ -51,7 +51,13 @@
                             <outlet property="delegate" destination="7OJ-0D-seo" id="jSm-f5-O9f"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="n5h-ZO-1nq"/>
+                    <navigationItem key="navigationItem" id="n5h-ZO-1nq">
+                        <barButtonItem key="leftBarButtonItem" style="plain" systemItem="refresh" id="RQU-ct-psx">
+                            <connections>
+                                <action selector="refreshPokemonsButton:" destination="7OJ-0D-seo" id="3Uq-o4-Pos"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="T07-e8-7Ps" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>

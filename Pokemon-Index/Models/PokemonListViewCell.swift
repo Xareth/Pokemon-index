@@ -12,6 +12,4 @@ class PokemonListViewCell: UITableViewCell {
 
     @IBOutlet weak var pokemonName: UILabel!
     @IBOutlet weak var pokemonImage: UIImageView!
-    
-
 }
