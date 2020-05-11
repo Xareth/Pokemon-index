@@ -15,7 +15,11 @@ struct PokemonManager {
     var context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     var pokemonArray: [Pokemon]?
+    var pokemonImageDict: Dictionary = [String : UIImage]()
     
+    
+    
+    // MARK: - Pokemon Data Api Import
     var baseString = "https://pokeapi.co/api/v2/"
     
     // Get API info about Pokemon
@@ -44,12 +48,25 @@ struct PokemonManager {
             let decodedData = try decoder.decode(PokemonData.self, from: newData)
             let pokemon = Pokemon(context: self.context)
             pokemon.name = decodedData.name
+            pokemon.image_url = decodedData.sprites.front_default
             return pokemon
         } catch {
             print(error.localizedDescription)
             return nil
         }
     }
+    
+    // Delete db of pokemons
+    func deletePokemons() {
+        // Delete pokemons from Core
+        do {
+            for object in pokemonArray! {
+                context.delete(object)
+            }
+        }
+        saveItems()
+    }
+
     
     // Save Pokemon to Core Data
     func saveItems() {
@@ -74,6 +91,22 @@ struct PokemonManager {
         }
     }
 
+    // Get image from url request
+    mutating func getImage(from string: String) {
+        if let url = URL(string: string) {
+            do {
+                let imageData = try Data(contentsOf: url, options: [])
+                let image = UIImage(data: imageData)
+                print("image \(image)")
+                pokemonImageDict[string] = image
+            }
+            catch {
+                print(error.localizedDescription)
+            }
+        }
+    }
+    
+    
 }
 
 
