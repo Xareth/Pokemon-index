@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 class PokemonListTableViewController: UITableViewController {
 
@@ -63,11 +64,11 @@ class PokemonListTableViewController: UITableViewController {
             }
         }
         pokemonManager.saveItems()
-        print("Preparation completed")
         
+        
+        // Download all pokemons
         var runTime = 0
         let timer = Timer.scheduledTimer(withTimeInterval: 0.61, repeats: true) { timer in
-            print(runTime)
             runTime += 1
             if self.pokemonRequestResult {
                 self.pokemonManager.requestPokemon(pokemonName: String(runTime))
@@ -75,6 +76,7 @@ class PokemonListTableViewController: UITableViewController {
                 timer.invalidate()
             }
         }
+        print("Preparation completed")
     }
     @IBAction func refreshPokemonsButton(_ sender: UIBarButtonItem) {
         preparePokemonList()
@@ -96,3 +98,33 @@ extension PokemonListTableViewController: PokemonRequestDelegate {
     }
 }
 
+
+//MARK:- Search bar
+extension PokemonListTableViewController: UISearchBarDelegate {
+    
+    // Search button clicked
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        
+        // Create request to DataCore with predicate based on search bar results
+        let request : NSFetchRequest<Pokemon> = Pokemon.fetchRequest()
+        if searchBar.text?.count != 0 {
+            request.predicate = NSPredicate(format: "name CONTAINS[cd] %@", searchBar.text!)
+            
+            // Sort items alphabetically by order / add this sort to request
+            request.sortDescriptors = [NSSortDescriptor(key: "id", ascending: true)]
+        }
+        
+        pokemonManager.loadItems(with: request)
+        
+        DispatchQueue.main.async {
+            searchBar.resignFirstResponder()
+        }
+        
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchBar.text?.count == 0 {
+            searchBarSearchButtonClicked(searchBar)
+        }
+    }
+}

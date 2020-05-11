@@ -56,6 +56,7 @@ struct PokemonManager {
         do {
             let decodedData = try decoder.decode(PokemonData.self, from: newData)
             let pokemon = Pokemon(context: self.context)
+            pokemon.id = String(decodedData.order)
             pokemon.name = decodedData.name.capitalized
             pokemon.image_url = decodedData.sprites.front_default
             pokemon.image_front = getPokemonImage(url: decodedData.sprites.front_default)
