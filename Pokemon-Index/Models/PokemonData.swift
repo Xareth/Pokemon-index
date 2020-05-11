@@ -11,6 +11,7 @@ import Foundation
 struct PokemonData: Codable {
     var name: String
     var sprites: Sprite
+    var order: Int
 }
 
 struct Sprite: Codable {
