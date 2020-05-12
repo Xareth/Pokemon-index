@@ -21,6 +21,7 @@ struct PokemonManager {
     var context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     var pokemonArray: [Pokemon]?
+    var pokemonChosen: Pokemon?
     
     var baseString = "https://pokeapi.co/api/v2/"
     
@@ -60,7 +61,15 @@ struct PokemonManager {
             pokemon.name = decodedData.name.capitalized
             pokemon.image_url = decodedData.sprites.front_default
             pokemon.image_front = getPokemonImage(url: decodedData.sprites.front_default)
-            print("New pokemon added \(pokemon.name)")
+            
+            let pokemonStats = adjustPokemonStats(data: decodedData)
+            pokemon.attack = pokemonStats["attack"]
+            pokemon.defense = pokemonStats["defense"]
+            pokemon.hp = pokemonStats["hp"]
+            pokemon.speed = pokemonStats["speed"]
+            pokemon.special_attack = pokemonStats["special-attack"]
+            pokemon.special_defense = pokemonStats["special-defense"]
+         
             return pokemon
         } catch {
             print(error.localizedDescription)
@@ -83,6 +92,15 @@ struct PokemonManager {
         return nil
     }
     
+    // Adjust Stats for pokemons
+    func adjustPokemonStats(data: PokemonData) -> [String : String] {
+        var pokemonStats = [String : String]()
+        for number in 0...data.stats.count - 1 {
+            pokemonStats[data.stats[number].stat.name] = String(data.stats[number].base_stat)
+        }
+        
+        return pokemonStats
+    }
     
     // Save Pokemon to Core Data
     func saveItems() {

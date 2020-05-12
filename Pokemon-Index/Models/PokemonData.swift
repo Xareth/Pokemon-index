@@ -12,8 +12,19 @@ struct PokemonData: Codable {
     var name: String
     var sprites: Sprite
     var order: Int
+    var stats: [Stats]
 }
 
 struct Sprite: Codable {
     var front_default: String
 }
+
+struct Stats: Codable {
+    var base_stat: Int
+    var stat: Stat
+}
+
+struct Stat: Codable {
+    var name: String
+}
+
