@@ -18,6 +18,7 @@ class PokemonListTableViewController: UITableViewController {
         super.viewDidLoad()
         
         pokemonManager.delegate = self
+        
         tableView.rowHeight = 90
         pokemonManager.loadItems()
         tableView.reloadData()
@@ -99,32 +100,39 @@ extension PokemonListTableViewController: PokemonRequestDelegate {
 }
 
 
-//MARK:- Search bar
+// MARK: - SearchBar Delegate
 extension PokemonListTableViewController: UISearchBarDelegate {
     
-    // Search button clicked
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         
-        // Create request to DataCore with predicate based on search bar results
-        let request : NSFetchRequest<Pokemon> = Pokemon.fetchRequest()
+        print("search started")
+        // Create request and filter
+        let request: NSFetchRequest<Pokemon> = Pokemon.fetchRequest()
+        
         if searchBar.text?.count != 0 {
-            request.predicate = NSPredicate(format: "name CONTAINS[cd] %@", searchBar.text!)
+            let predicate = NSPredicate(format: "name CONTAINS[cd] %@", searchBar.text!)
             
-            // Sort items alphabetically by order / add this sort to request
-            request.sortDescriptors = [NSSortDescriptor(key: "id", ascending: true)]
+            // Add filter (predicate) to request
+            request.predicate = predicate
         }
         
+        // Create sorting method
+        let sortDescriptor = NSSortDescriptor(key: "id", ascending: true)
+        
+        // Add sorting method to request
+        request.sortDescriptors = [sortDescriptor]
+        
+        // Load items to pokemon Array
         pokemonManager.loadItems(with: request)
-        
-        DispatchQueue.main.async {
-            searchBar.resignFirstResponder()
-        }
-        
+        tableView.reloadData()
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        if searchBar.text?.count == 0 {
+        if searchText.count == 0 {
             searchBarSearchButtonClicked(searchBar)
         }
     }
+    
 }
+
+
