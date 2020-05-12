@@ -111,7 +111,6 @@ struct PokemonManager {
         } catch {
             print(error.localizedDescription)
         }
-        
     }
 }
 
