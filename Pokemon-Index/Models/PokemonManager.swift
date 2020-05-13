@@ -34,7 +34,7 @@ struct PokemonManager {
             let session = URLSession(configuration: .default)
             let task = session.dataTask(with: url) { (data, response, error) in
                 if error != nil {
-                    print(error?.localizedDescription)
+                    print(error?.localizedDescription ?? "There was unknown error in requestPokemon\task")
                 } else {
                     if let safeData = data {
                         let pokemonData = self.parsePokemonJSON(newData: safeData)
