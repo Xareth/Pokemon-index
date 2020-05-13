@@ -69,6 +69,11 @@ struct PokemonManager {
             pokemon.speed = pokemonStats["speed"]
             pokemon.special_attack = pokemonStats["special-attack"]
             pokemon.special_defense = pokemonStats["special-defense"]
+            
+            pokemon.type1 = decodedData.types[0].type.name
+            if decodedData.types.count == 2 {
+                pokemon.type2 = decodedData.types[1].type.name
+            }
          
             return pokemon
         } catch {

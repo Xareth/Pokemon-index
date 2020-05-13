@@ -13,6 +13,8 @@ class PokemonListTableViewController: UITableViewController {
 
     var pokemonManager = PokemonManager()
     var pokemonRequestResult = true
+    var reloadData = true
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,7 +40,12 @@ class PokemonListTableViewController: UITableViewController {
         if let pokemon = pokemonManager.pokemonArray?[indexPath.row], let pokemonImage = pokemon.image_front {
             cell.pokemonName.text = pokemon.name
             cell.pokemonImage.image = UIImage(data: pokemonImage)
-            
+            if let type1 = pokemon.type1 {
+                cell.type2Image.image = UIImage(imageLiteralResourceName: type1)
+            }
+            if let type2 = pokemon.type2 {
+                cell.type1Image.image = UIImage(imageLiteralResourceName: type2)
+            }
         }
         return cell
     }
@@ -63,7 +70,9 @@ class PokemonListTableViewController: UITableViewController {
     func updateModel() {
         DispatchQueue.main.async {
             self.pokemonManager.loadItems()
-            self.tableView.reloadData()
+            if self.reloadData {
+                self.tableView.reloadData()
+            }
             print("updated")
         }
     }
@@ -144,6 +153,7 @@ extension PokemonListTableViewController: UISearchBarDelegate {
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         searchBarSearchButtonClicked(searchBar)
+        reloadData = false
     }
     
 }

@@ -12,18 +12,25 @@ class PokemonDetailsViewController: UIViewController {
     
     @IBOutlet weak var pokemonNameLabel: UILabel!
     @IBOutlet weak var pokemonMainImage: UIImageView!
+    @IBOutlet weak var pokemonId: UILabel!
+    @IBOutlet weak var type1image: UIImageView!
+    @IBOutlet weak var type2image: UIImageView!
     
     var pokemon: Pokemon?
-    var statsNames: Array = ["attack", "hp", "speed", "defense", "special-attack", "special-defense"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         pokemonNameLabel.text = pokemon?.name
         pokemonMainImage.image = UIImage(data: (pokemon?.image_front)!)
-           
+        pokemonId.text = pokemon?.id
+        if let type1 = pokemon?.type1 {
+            type1image.image = UIImage(named: type1)
+        }
+        if let type2 = pokemon?.type2 {
+            type2image.image = UIImage(named: type2)
+        }
     }
-
 }
 
 // TableView DataSource and Delegate methods
@@ -66,6 +73,4 @@ extension PokemonDetailsViewController: UITableViewDelegate, UITableViewDataSour
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
         return cell
     }
-    
-    
 }

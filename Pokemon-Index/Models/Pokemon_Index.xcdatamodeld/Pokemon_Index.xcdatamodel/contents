@@ -11,8 +11,10 @@
         <attribute name="special_attack" optional="YES" attributeType="String"/>
         <attribute name="special_defense" optional="YES" attributeType="String"/>
         <attribute name="speed" optional="YES" attributeType="String"/>
+        <attribute name="type1" optional="YES" attributeType="String"/>
+        <attribute name="type2" optional="YES" attributeType="String"/>
     </entity>
     <elements>
-        <element name="Pokemon" positionX="-63" positionY="-18" width="128" height="193"/>
+        <element name="Pokemon" positionX="-63" positionY="-18" width="128" height="223"/>
     </elements>
 </model>
