@@ -18,6 +18,7 @@
 		401582272462C8E20035944B /* PokemonData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 401582262462C8E20035944B /* PokemonData.swift */; };
 		40E6E8062469641C00290B00 /* PokemonListViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E6E8052469641C00290B00 /* PokemonListViewCell.swift */; };
 		40E6E808246ADF2C00290B00 /* PokemonDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E6E807246ADF2C00290B00 /* PokemonDetailsViewController.swift */; };
+		40E6E80E246BE61C00290B00 /* PokemonDetailsViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E6E80D246BE61C00290B00 /* PokemonDetailsViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,6 +35,7 @@
 		401582262462C8E20035944B /* PokemonData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonData.swift; sourceTree = "<group>"; };
 		40E6E8052469641C00290B00 /* PokemonListViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonListViewCell.swift; sourceTree = "<group>"; };
 		40E6E807246ADF2C00290B00 /* PokemonDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonDetailsViewController.swift; sourceTree = "<group>"; };
+		40E6E80D246BE61C00290B00 /* PokemonDetailsViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonDetailsViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,6 +104,7 @@
 				401582262462C8E20035944B /* PokemonData.swift */,
 				401582112462B3C20035944B /* Pokemon_Index.xcdatamodeld */,
 				40E6E8052469641C00290B00 /* PokemonListViewCell.swift */,
+				40E6E80D246BE61C00290B00 /* PokemonDetailsViewCell.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -184,6 +187,7 @@
 				4015820B2462B3C20035944B /* SceneDelegate.swift in Sources */,
 				40E6E8062469641C00290B00 /* PokemonListViewCell.swift in Sources */,
 				401582232462B5640035944B /* PokemonListTableViewController.swift in Sources */,
+				40E6E80E246BE61C00290B00 /* PokemonDetailsViewCell.swift in Sources */,
 				40E6E808246ADF2C00290B00 /* PokemonDetailsViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
