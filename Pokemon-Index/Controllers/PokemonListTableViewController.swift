@@ -40,9 +40,24 @@ class PokemonListTableViewController: UITableViewController {
             cell.pokemonImage.image = UIImage(data: pokemonImage)
             
         }
-        print("Cell at \(indexPath.row) was loaded")
         return cell
     }
+    
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        if let pokemon = pokemonManager.pokemonArray?[indexPath.row] {
+            pokemonManager.pokemonChosen = pokemon
+            performSegue(withIdentifier: "goToPokemonDetails", sender: self)
+        }
+    }
+    
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let destinationVC = segue.destination as! PokemonDetailsViewController
+        destinationVC.pokemon = pokemonManager.pokemonChosen ?? nil
+    }
+    
     
     // MARK: - Update Pokemon List
     func updateModel() {
@@ -128,9 +143,7 @@ extension PokemonListTableViewController: UISearchBarDelegate {
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        if searchText.count == 0 {
-            searchBarSearchButtonClicked(searchBar)
-        }
+        searchBarSearchButtonClicked(searchBar)
     }
     
 }
