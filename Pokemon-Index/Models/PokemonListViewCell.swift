@@ -12,4 +12,14 @@ class PokemonListViewCell: UITableViewCell {
 
     @IBOutlet weak var pokemonName: UILabel!
     @IBOutlet weak var pokemonImage: UIImageView!
+    @IBOutlet weak var type1Image: UIImageView!
+    @IBOutlet weak var type2Image: UIImageView!
+    
+    override func prepareForReuse() {
+        pokemonName.text = ""
+        pokemonImage.image = nil
+        type1Image.image = nil
+        type2Image.image = nil
+    }
+    
 }
