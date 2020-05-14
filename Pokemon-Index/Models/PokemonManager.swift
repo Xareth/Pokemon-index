@@ -77,7 +77,13 @@ struct PokemonManager {
             if decodedData.types.count == 2 {
                 pokemon.type2 = decodedData.types[1].type.name
             }
-         
+            
+            for ability in decodedData.abilities {
+                let move = loadMove(name: ability.ability.name)
+                pokemon.moves?.adding(move)
+                print("Ability name \(ability.ability.name)")
+            }
+            
             return pokemon
         } catch {
             print(error.localizedDescription)
@@ -111,8 +117,8 @@ struct PokemonManager {
     }
     
     // MARK: - Moves downloader
-    func requestAllMoves() {
-        let urlString = String("https://pokeapi.co/api/v2/move/728")
+    func requestMove(move: String) {
+        let urlString = String("https://pokeapi.co/api/v2/move/\(move)")
         if let url = URL(string: urlString) {
             let session = URLSession(configuration: .default)
             let task = session.dataTask(with: url) { (data, response, error) in
@@ -120,7 +126,7 @@ struct PokemonManager {
                     print(error?.localizedDescription ?? "There was unknown error in requestPokemon\task")
                 } else {
                     if let safeData = data {
-                        self.parseMovesJSON(newData: safeData)
+                        let result = self.parseMovesJSON(newData: safeData)
                         self.saveItems()
                     }
                 }
@@ -128,6 +134,7 @@ struct PokemonManager {
             task.resume()
         }
     }
+
     
     func parseMovesJSON(newData: Data) -> Moves? {
         let decoder = JSONDecoder()
@@ -139,7 +146,7 @@ struct PokemonManager {
             move.effect = decodedData.effect_entries[0].effect
             return move
         } catch {
-            print(error)
+            print("There was error in parseMovesJSON: \(error.localizedDescription)")
         }
         return nil
     }
@@ -183,6 +190,21 @@ struct PokemonManager {
         }
     }
     
+    // Load Move
+    func loadMove(name: String) -> Moves? {
+        let request: NSFetchRequest<Moves> = Moves.fetchRequest()
+        let predicate = NSPredicate(format: "name MATCHES[cd] %@", name)
+        request.predicate = predicate
+        
+        do {
+            let move = try context.fetch(request)
+            return move[0]
+        } catch {
+            print("Error while fetching Item data: \(error.localizedDescription)")
+        }
+        return nil
+    }
+    
     // Delete Moves
     func deleteMoves(move: NSManagedObject) {
         context.delete(move)
@@ -193,6 +215,7 @@ struct PokemonManager {
             print(error.localizedDescription)
         }
     }
+    
 }
 
 

@@ -14,6 +14,7 @@ struct PokemonData: Codable {
     var order: Int
     var stats: [Stats]
     var types: [Types]
+    var abilities: [Abilities]
 }
 
 struct Sprite: Codable {
@@ -35,4 +36,13 @@ struct Types: Codable {
 
 struct Type: Codable {
     var name: String
+}
+
+struct Abilities: Codable {
+    var ability: Ability
+}
+
+struct Ability: Codable {
+    var name: String
+    var url: String
 }

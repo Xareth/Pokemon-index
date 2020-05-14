@@ -23,9 +23,6 @@ class PokemonListTableViewController: UITableViewController {
         
         tableView.rowHeight = 90
         
-        print("moves began")
-        pokemonManager.requestAllMoves()
-        
         pokemonManager.loadPokemons()
         tableView.reloadData()
         
@@ -83,6 +80,32 @@ class PokemonListTableViewController: UITableViewController {
     
     
     // MARK: - Pokemon loader
+    func prepareMoves() {
+        // Delete all moves
+        print("Preparation for move download started")
+        pokemonManager.loadMoves()
+        if let movesArray = pokemonManager.movesArray {
+            for move in movesArray {
+                print("\(move.name) deleted")
+                pokemonManager.deleteMoves(move: move)
+            }
+        }
+        pokemonManager.saveItems()
+        
+        // Load new moves
+        var runTime = 0
+        let timer = Timer.scheduledTimer(withTimeInterval: 0.61, repeats: true) { timer in
+            runTime += 1
+            if runTime <= 729 {
+                self.pokemonManager.requestMove(move: String(runTime))
+                print("Move updated \(runTime)")
+            } else {
+                timer.invalidate()
+                print("Move database updated")
+            }
+        }
+    }
+    
     func preparePokemonList() {
         // Delete all pokemons
         print("Preparation started")
@@ -100,6 +123,7 @@ class PokemonListTableViewController: UITableViewController {
         let timer = Timer.scheduledTimer(withTimeInterval: 0.61, repeats: true) { timer in
             runTime += 1
             if self.pokemonRequestResult {
+                print("Pokemon updated \(runTime)")
                 self.pokemonManager.requestPokemon(pokemonName: String(runTime))
             } else {
                 timer.invalidate()
@@ -107,7 +131,9 @@ class PokemonListTableViewController: UITableViewController {
         }
         print("Preparation completed")
     }
+    
     @IBAction func refreshPokemonsButton(_ sender: UIBarButtonItem) {
+//        prepareMoves()
         preparePokemonList()
     }
 }
