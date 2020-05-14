@@ -27,6 +27,8 @@ struct PokemonManager {
     
     var delegate: PokemonRequestDelegate?
     
+    
+    // MARK: - Pokemon downloader
     // Get API info about Pokemon
     func requestPokemon(pokemonName: String) {
         let urlString = String("\(baseString)/pokemon/\(pokemonName)/")
@@ -107,6 +109,41 @@ struct PokemonManager {
         return pokemonStats
     }
     
+    // MARK: - Moves downloader
+    func requestAllMoves() {
+        let urlString = String("https://pokeapi.co/api/v2/move/728")
+        if let url = URL(string: urlString) {
+            let session = URLSession(configuration: .default)
+            let task = session.dataTask(with: url) { (data, response, error) in
+                if error != nil {
+                    print(error?.localizedDescription ?? "There was unknown error in requestPokemon\task")
+                } else {
+                    if let safeData = data {
+                        self.parseMovesJSON(newData: safeData)
+                        self.saveItems()
+                    }
+                }
+            }
+            task.resume()
+        }
+    }
+    
+    func parseMovesJSON(newData: Data) -> Moves? {
+        let decoder = JSONDecoder()
+        do {
+            let decodedData = try decoder.decode(MovesData.self, from: newData)
+            var move = Moves(context: self.context)
+            move.id = String(decodedData.id)
+            move.name = decodedData.name
+            move.effect = decodedData.effect_entries[0].effect
+            return move
+        } catch {
+            print(error)
+        }
+        return nil
+    }
+    
+    // MARK: - Core Data methods
     // Save Pokemon to Core Data
     func saveItems() {
         do {

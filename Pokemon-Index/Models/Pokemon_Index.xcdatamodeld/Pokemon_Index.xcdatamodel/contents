@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="16119" systemVersion="19E287" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="Moves" representedClassName=".Moves" syncable="YES" codeGenerationType="class">
+        <attribute name="effect" optional="YES" attributeType="String"/>
+        <attribute name="id" optional="YES" attributeType="String"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <relationship name="pokemons" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Pokemon" inverseName="moves" inverseEntity="Pokemon"/>
+    </entity>
     <entity name="Pokemon" representedClassName=".Pokemon" syncable="YES" codeGenerationType="class">
         <attribute name="attack" optional="YES" attributeType="String"/>
         <attribute name="defense" optional="YES" attributeType="String"/>
@@ -13,8 +19,10 @@
         <attribute name="speed" optional="YES" attributeType="String"/>
         <attribute name="type1" optional="YES" attributeType="String"/>
         <attribute name="type2" optional="YES" attributeType="String"/>
+        <relationship name="moves" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Moves" inverseName="pokemons" inverseEntity="Moves"/>
     </entity>
     <elements>
-        <element name="Pokemon" positionX="-63" positionY="-18" width="128" height="223"/>
+        <element name="Pokemon" positionX="239.34375" positionY="-59.1015625" width="128" height="238"/>
+        <element name="Moves" positionX="-63.80859375" positionY="75.74609375" width="128" height="103"/>
     </elements>
 </model>

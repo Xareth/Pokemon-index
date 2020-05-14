@@ -22,6 +22,10 @@ class PokemonListTableViewController: UITableViewController {
         pokemonManager.delegate = self
         
         tableView.rowHeight = 90
+        
+        print("moves began")
+        pokemonManager.requestAllMoves()
+        
         pokemonManager.loadItems()
         tableView.reloadData()
         
