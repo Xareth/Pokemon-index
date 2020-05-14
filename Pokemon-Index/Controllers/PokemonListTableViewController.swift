@@ -26,7 +26,7 @@ class PokemonListTableViewController: UITableViewController {
         print("moves began")
         pokemonManager.requestAllMoves()
         
-        pokemonManager.loadItems()
+        pokemonManager.loadPokemons()
         tableView.reloadData()
         
     }
@@ -73,7 +73,7 @@ class PokemonListTableViewController: UITableViewController {
     // MARK: - Update Pokemon List
     func updateModel() {
         DispatchQueue.main.async {
-            self.pokemonManager.loadItems()
+            self.pokemonManager.loadPokemons()
             if self.reloadData {
                 self.tableView.reloadData()
             }
@@ -86,7 +86,7 @@ class PokemonListTableViewController: UITableViewController {
     func preparePokemonList() {
         // Delete all pokemons
         print("Preparation started")
-        pokemonManager.loadItems()
+        pokemonManager.loadPokemons()
         if let pokemonArray = pokemonManager.pokemonArray {
             for pokemon in pokemonArray {
                 pokemonManager.deletePokemon(pokemon: pokemon)
@@ -151,7 +151,7 @@ extension PokemonListTableViewController: UISearchBarDelegate {
         request.sortDescriptors = [sortDescriptor]
         
         // Load items to pokemon Array
-        pokemonManager.loadItems(with: request)
+        pokemonManager.loadPokemons(with: request)
         tableView.reloadData()
     }
     

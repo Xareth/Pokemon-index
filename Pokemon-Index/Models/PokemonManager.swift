@@ -21,6 +21,7 @@ struct PokemonManager {
     var context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     var pokemonArray: [Pokemon]?
+    var movesArray: [Moves]?
     var pokemonChosen: Pokemon?
     
     var baseString = "https://pokeapi.co/api/v2/"
@@ -132,7 +133,7 @@ struct PokemonManager {
         let decoder = JSONDecoder()
         do {
             let decodedData = try decoder.decode(MovesData.self, from: newData)
-            var move = Moves(context: self.context)
+            let move = Moves(context: self.context)
             move.id = String(decodedData.id)
             move.name = decodedData.name
             move.effect = decodedData.effect_entries[0].effect
@@ -144,7 +145,7 @@ struct PokemonManager {
     }
     
     // MARK: - Core Data methods
-    // Save Pokemon to Core Data
+    // Save All items to Core Data
     func saveItems() {
         do {
             try self.context.save()
@@ -154,7 +155,7 @@ struct PokemonManager {
     }
     
     // Load Pokemons to pokemonArray
-    mutating func loadItems(with request: NSFetchRequest<Pokemon> = Pokemon.fetchRequest()) {
+    mutating func loadPokemons(with request: NSFetchRequest<Pokemon> = Pokemon.fetchRequest()) {
         do {
             pokemonArray = try context.fetch(request)
         } catch {
@@ -168,6 +169,26 @@ struct PokemonManager {
         do {
             try context.save()
             print("Pokemon deleted")
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
+    
+    // Load Moves to moveArray
+    mutating func loadMoves(with request: NSFetchRequest<Moves> = Moves.fetchRequest()) {
+        do {
+            movesArray = try context.fetch(request)
+        } catch {
+            print("Error while fetching Item data: \(error.localizedDescription)")
+        }
+    }
+    
+    // Delete Moves
+    func deleteMoves(move: NSManagedObject) {
+        context.delete(move)
+        do {
+            try context.save()
+            print("Move deleted")
         } catch {
             print(error.localizedDescription)
         }
