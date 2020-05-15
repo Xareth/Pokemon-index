@@ -36,14 +36,25 @@ class PokemonDetailsViewController: UIViewController {
 // TableView DataSource and Delegate methods
 extension PokemonDetailsViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if tableView.restorationIdentifier == "MovesTableView" {
+            print(pokemon?.moves?.count)
+            
+            return pokemon?.moves?.count ?? 1
+        }
         if tableView.restorationIdentifier == "StatsTableView" {
             return 6
         }
-        
+
         return 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        if tableView.restorationIdentifier == "MovesTableView" {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "MoveCell", for: indexPath)
+            cell.textLabel?.text = "nice"
+            return cell
+        }
         if tableView.restorationIdentifier == "StatsTableView" {
             let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! PokemonDetailsViewCell
             switch indexPath.row {
@@ -70,6 +81,7 @@ extension PokemonDetailsViewController: UITableViewDelegate, UITableViewDataSour
             }
             return cell
         }
+        
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
         return cell
     }

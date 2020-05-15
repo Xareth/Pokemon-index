@@ -78,11 +78,21 @@ struct PokemonManager {
                 pokemon.type2 = decodedData.types[1].type.name
             }
             
-            for ability in decodedData.abilities {
-                let move = loadMove(name: ability.ability.name)
-                pokemon.moves?.adding(move)
-                print("Ability name \(ability.ability.name)")
-            }
+//            var moves: NSSe = []
+//            for ability in decodedData.abilities {
+//                if let move = loadMove(name: ability.ability.name) {
+//                    moves.adding(move)
+//                    print("Move: \(move)")
+//                }
+//            }
+//            pokemon.moves.
+//            print("THis is count of moves: \(pokemon.moves?.count)")
+//            if let moves = pokemon.moves {
+//                for move in moves {
+//                    print(move)
+//                }
+//            }
+            
             
             return pokemon
         } catch {
@@ -193,12 +203,15 @@ struct PokemonManager {
     // Load Move
     func loadMove(name: String) -> Moves? {
         let request: NSFetchRequest<Moves> = Moves.fetchRequest()
-        let predicate = NSPredicate(format: "name MATCHES[cd] %@", name)
+        let predicate = NSPredicate(format: "name CONTAINS[cd] %@", name)
         request.predicate = predicate
         
         do {
             let move = try context.fetch(request)
-            return move[0]
+            if move.count > 0 {
+                print("Move in load move: \(move[0].name)")
+                return move[0]
+            }
         } catch {
             print("Error while fetching Item data: \(error.localizedDescription)")
         }

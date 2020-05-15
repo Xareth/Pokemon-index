@@ -71,6 +71,7 @@ class PokemonListTableViewController: UITableViewController {
     func updateModel() {
         DispatchQueue.main.async {
             self.pokemonManager.loadPokemons()
+            self.pokemonManager.loadMoves()
             if self.reloadData {
                 self.tableView.reloadData()
             }
